@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getTags } from "./services/categoryService";
+import { Link } from "react-router-dom";
 
 class NavTags extends Component {
   state = {
@@ -18,9 +19,9 @@ class NavTags extends Component {
       <div className="nav-tag-wrapper">
         <ul className="nav-tag">
           {tags.map((tag) => (
-            <li className="nav-tag-item" key={tag.id}>
-              {tag.name}
-            </li>
+            <Link key={tag.id} className="link" to={`/${tag.name}`}>
+              <li className="nav-tag-item">{tag.name}</li>
+            </Link>
           ))}
         </ul>
         <hr></hr>

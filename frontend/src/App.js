@@ -16,6 +16,7 @@ function App() {
         <Navbar></Navbar>
         <NavTags></NavTags>
         <Switch>
+          <Route exact path="/:id" component={MainPage} />
           <Route path="/products" component={MainPage} />
           <Route path="/product/:id" component={Product} />
           <Route path="/not-found" component={NotFound} />

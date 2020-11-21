@@ -12,7 +12,7 @@ class MainPage extends Component {
     subCategories: [],
     selectedCategory: null,
     selectedTag: null,
-    navigation: ["Products"],
+    navigation: ["Homepage"],
   };
 
   componentDidMount = async () => {
@@ -20,6 +20,15 @@ class MainPage extends Component {
     const { data: categories } = await getCategories();
     this.setState({ products, categories }); // get data from api and save in state
     this.getSubCategories();
+    this.getCurrentPath();
+  };
+
+  getCurrentPath = () => {
+    const { navigation } = this.state;
+    const location = this.props.match.params.id;
+
+    navigation.push(location);
+    this.setState(navigation);
   };
 
   handlePathChange = (path) => {

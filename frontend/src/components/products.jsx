@@ -9,12 +9,14 @@ class Products extends Component {
       <div className="products-grid">
         {products.map((product) => (
           <div key={product.id} className="card">
-            <Link to={`/product/${product.id}`}>
+            <Link className="link" to={`/product/${product.id}`}>
               <img src={product.image} alt="" className="card-img-top" />
             </Link>
             <div className="card-body">
               <h5 key={product.id} className="card-title">
-                <Link to={`product/${product.id}`}>{product.title}</Link>
+                <Link className="link" to={`product/${product.id}`}>
+                  {product.title}
+                </Link>
               </h5>
               <div className="card-text">{product.price} €</div>
             </div>

@@ -65,6 +65,14 @@ body {
     }
   }
 }
+
+.link {
+  color: black;
+
+  &:hover {
+    color: black;
+  }
+}
 .container {
   min-width: 1025px;
   background: white;
@@ -135,6 +143,12 @@ body {
       white-space: nowrap;
       overflow: hidden;
       padding: 5px;
+
+      &-content {
+        height: 100%;
+        width: 100%;
+        color: black;
+      }
 
       &-price {
         font-weight: bold;

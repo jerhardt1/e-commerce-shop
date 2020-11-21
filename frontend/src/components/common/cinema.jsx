@@ -2,6 +2,7 @@ import { indexOf } from "lodash";
 import React, { Component } from "react";
 import { paginate } from "./../../utils/paginate";
 import { getTranslateX } from "./../../utils/style";
+import { Link } from "react-router-dom";
 
 class Cinema extends Component {
   state = {
@@ -86,11 +87,16 @@ class Cinema extends Component {
               <ul className="cinema-track">
                 {items.map((item) => (
                   <li className="cinema-item" key={item.id}>
-                    <div className="cinema-item-image">
-                      <img src={item.image} alt={item.title} />
-                    </div>
-                    <div className="cinema-item-title">{item.title}</div>
-                    <div className="cinema-item-price">€ {item.price}</div>
+                    <Link
+                      className="cinema-item-content"
+                      to={`/product/${item.id}`}
+                    >
+                      <div className="cinema-item-image">
+                        <img src={item.image} alt={item.title} />
+                      </div>
+                      <div className="cinema-item-title">{item.title}</div>
+                      <div className="cinema-item-price">€ {item.price}</div>
+                    </Link>
                   </li>
                 ))}
               </ul>
