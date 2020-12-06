@@ -5,7 +5,12 @@
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
 @import "~@fortawesome/fontawesome-free/css/all.min.css";
 
-$bg-color: rgb(211, 214, 216);
+$bg-color-main: rgb(211, 214, 216);
+$important-color: rgb(216, 0, 0);
+$font-color-soft: rgb(51, 51, 51);
+$font-color: black;
+$bg-color-soft: rgb(235, 235, 235);
+$bg-color-soft-var: rgb(214, 214, 214);
 
 * {
   margin: 0px;
@@ -15,7 +20,7 @@ $bg-color: rgb(211, 214, 216);
 
 html,
 body {
-  background-color: $bg-color;
+  background-color: $bg-color-main;
   height: 100%;
 
   nav {
@@ -45,7 +50,7 @@ body {
         align-items: center;
         justify-content: space-between;
         flex-wrap: nowrap;
-        background-color: $bg-color;
+        background-color: $bg-color-main;
         padding: 10px;
         width: 74%;
       }
@@ -202,6 +207,166 @@ body {
       // &-active {
       //   display: block;
       // }
+    }
+  }
+
+  .wrapper-m {
+    width: 100%;
+    height: 100%;
+  }
+
+  .image-m {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    img {
+      height: 100%;
+      object-fit: cover;
+      margin: auto;
+    }
+  }
+
+  .image-scroll {
+    height: 100px;
+    width: 100px;
+    display: flex;
+
+    &--vertical {
+      flex-direction: column;
+    }
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
+  .prd_detailed {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .prd_detailed__images {
+    width: 60%;
+    height: 500px;
+    display: flex;
+  }
+
+  .prd_size {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .prd_select {
+    width: 350px;
+    height: 40px;
+    // text-indent: 10px;
+    padding: 0 0 0 4px;
+
+    option {
+      padding: 0px 2px 1px;
+    }
+  }
+
+  .prd_detailed__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 40%;
+  }
+
+  .prd_detailed__color {
+    display: inline-block;
+  }
+
+  .prd_price {
+    display: block;
+    max-width: 350px;
+    max-height: 50px;
+    font-size: 0.875rem;
+    line-height: 1.42857em;
+
+    .prd_price__amount {
+      line-height: 1.25em;
+      margin-right: 10px;
+      font-size: 1.5rem;
+      color: $important-color;
+      font-weight: bold;
+    }
+
+    .prd_price__note {
+      line-height: 1.5em;
+      font-size: 0.75rem;
+      color: $font-color-soft;
+    }
+  }
+
+  .button_group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .color {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &__block {
+      width: 24px;
+      height: 24px;
+      margin: 5px 5px 0px 0px;
+      padding: 5px 5px 0px 0px;
+
+      &:hover {
+        border-width: 1px;
+        border-style: solid;
+        border-color: $bg-color-soft-var;
+        cursor: pointer;
+      }
+
+      &--active {
+        border-width: 2px;
+        border-style: solid;
+        border-color: $important-color;
+
+        &:hover {
+          border-width: 2px;
+          border-style: solid;
+          border-color: $important-color;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+
+  .font {
+    &--bold {
+      color: $font-color;
+      font-weight: bold;
+    }
+    &--important {
+      color: $important-color;
+      font-weight: bold;
+    }
+  }
+
+  .button_primary {
+    width: 350px;
+    height: 50px;
+    color: $font-color-soft;
+    background-color: $bg-color-soft;
+    border-radius: 3px;
+    border-color: $bg-color-soft-var;
+    border-style: solid;
+    margin: 5px 0px;
+
+    &--important {
+      @extend .button_primary;
+      background-color: $important-color;
+      border-color: $important-color;
+      color: white;
     }
   }
 

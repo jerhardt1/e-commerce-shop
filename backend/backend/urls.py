@@ -25,6 +25,7 @@ router.register(r'products', views.ProdcutView, 'product')
 router.register(r'productTypes', views.ProductTypeView, 'productType')
 router.register(r'tags', views.TagView, 'tags')
 router.register(r'promotions', views.PromotionView, 'promotions')
+router.register(r'images', views.ImageView, 'images')
 
 
 urlpatterns = [
