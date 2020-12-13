@@ -8,6 +8,7 @@ import NotFound from "./components/notFound";
 
 import "./scss/custom.scss";
 import Home from "./components/home";
+import Basket from "./components/basket";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Navbar></Navbar>
         <NavTags></NavTags>
         <Switch>
+          <Route path="/basket" component={Basket} />
           <Route exact path="/:id" component={MainPage} />
           <Route path="/products" component={MainPage} />
           <Route path="/product/:id" component={Product} />

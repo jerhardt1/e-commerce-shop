@@ -5,8 +5,6 @@ class NavItem extends Component {
   render() {
     const { title, iconClass } = this.props;
 
-    console.log(iconClass);
-
     return (
       <React.Fragment>
         <span>

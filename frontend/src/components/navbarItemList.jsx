@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import NavItem from "./navItem";
+import NavItem from "./common/navItem";
+import { NavLink } from "react-router-dom";
 
 class NavbarItemList extends Component {
   state = {};
@@ -22,10 +23,12 @@ class NavbarItemList extends Component {
           <NavItem title="Wishlist" iconClass="far fa-heart fa-3x"></NavItem>
         </li>
         <li className="icon icon--labeled">
-          <NavItem
-            title="Basket"
-            iconClass="fas fa-shopping-basket fa-3x"
-          ></NavItem>
+          <NavLink className="icon link" to="/basket">
+            <NavItem
+              title="Basket"
+              iconClass="fas fa-shopping-basket fa-3x"
+            ></NavItem>
+          </NavLink>
         </li>
       </ul>
     );

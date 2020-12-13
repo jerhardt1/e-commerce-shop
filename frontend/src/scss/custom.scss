@@ -10,7 +10,10 @@ $bg-color-main: rgb(211, 214, 216);
 $important-color: rgb(216, 0, 0);
 $font-color-soft: rgb(51, 51, 51);
 $font-color: black;
+$font-color-soft: rgb(97, 97, 97);
+$font-color-soft-var: rgb(151, 151, 151);
 $bg-color-soft: rgb(235, 235, 235);
+$bg-color-dark: rgb(124, 124, 124);
 $bg-color-soft-var: rgb(214, 214, 214);
 
 * {
@@ -62,6 +65,7 @@ body {
         list-style: none;
         width: 350px;
         margin-bottom: 0px;
+        text-decoration: none;
         .link-nav {
           background-color: transparent !important;
           color: rgba(0, 0, 0, 0.5) !important;
@@ -111,6 +115,14 @@ body {
   width: 100%;
 }
 
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 0px;
+}
+
 .link {
   color: black;
 
@@ -118,6 +130,113 @@ body {
     color: black;
   }
 }
+
+.basket {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 32px;
+
+  hr {
+    margin: 0;
+  }
+
+  &__header {
+    display: flex;
+    width: 100%;
+    text-align: right;
+    &__retailerName {
+      width: 60%;
+      font-size: 20px;
+      text-align: left;
+    }
+    &__quantity {
+      width: 10%;
+    }
+    &__price {
+      width: 20%;
+    }
+    &__delete {
+      width: 10%;
+    }
+  }
+
+  &__footer {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 120px;
+    margin: 20px 30% 20px 60%;
+
+    .subtotal {
+      width: 100%;
+    }
+  }
+
+  .basketItem {
+    display: flex;
+    width: 100%;
+    text-align: right;
+    padding: 20px 0;
+    &__image {
+      width: 10%;
+      display: block;
+      padding: 0 10px;
+
+      img {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+      }
+    }
+    &__info {
+      flex-direction: column;
+      width: 50%;
+      text-align: left;
+    }
+
+    &__quantity {
+      width: 10%;
+    }
+    &__price {
+      width: 20%;
+    }
+    &__delete {
+      width: 10%;
+    }
+  }
+}
+
+.process {
+  display: flex;
+  width: 500px;
+  justify-content: space-between;
+  list-style: none;
+  margin-left: 10px;
+
+  li {
+    counter-increment: level1;
+    color: $font-color-soft;
+    font-weight: 400;
+  }
+
+  li:before {
+    margin: 0 5px;
+    color: $font-color-soft;
+    display: inline-block;
+    content: counter(level1) " ";
+    border: solid 2px;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    line-height: 18px;
+    font-weight: 400;
+  }
+}
+
 .container {
   min-width: 1025px;
   background: white;
@@ -255,6 +374,10 @@ body {
     height: 100%;
   }
 
+  .wrapper-xl {
+    width: 100%;
+  }
+
   .image-m {
     height: 100%;
     width: 100%;
@@ -390,20 +513,37 @@ body {
       color: $important-color;
       font-weight: bold;
     }
+
+    &--small {
+      font-size: 12px;
+    }
+
+    &--soft {
+      color: $font-color-soft-var;
+    }
+
+    &--large {
+      font-size: 22px;
+    }
   }
 
-  .button_primary {
-    width: 350px;
-    height: 50px;
+  .button {
     color: $font-color-soft;
     background-color: $bg-color-soft;
     border-radius: 3px;
-    border-color: $bg-color-soft-var;
+    border-color: $bg-color-main;
     border-style: solid;
     margin: 5px 0px;
+    &_primary {
+      width: 350px;
+      height: 50px;
+    }
+    &_secondary {
+      width: 250px;
+      height: 40px;
+    }
 
     &--important {
-      @extend .button_primary;
       background-color: $important-color;
       border-color: $important-color;
       color: white;

@@ -15,6 +15,40 @@ class Product extends Component {
     this.setState({ product });
   };
 
+  addToBasket = () => {
+    const { product } = this.state;
+    const content = { id: product.id, amount: 1 };
+    let basket = JSON.parse(localStorage.getItem("basket"));
+
+    function itemInBasket() {
+      // check all items in basket if contain same id as product
+      for (var i in basket) {
+        if (basket[i].id === product.id) {
+          // add 1 to prevent index of 0, allowing True/False check
+          return parseInt(i) + 1;
+        }
+      }
+      return 0;
+    }
+
+    const item = itemInBasket();
+
+    if (item) {
+      // increment amount in object
+      basket[item - 1].amount = basket[item - 1].amount + 1;
+    } else {
+      if (basket) {
+        // append new product at the end of array
+        basket[basket.length] = content;
+      } else {
+        // create new array with product inside
+        basket = [content];
+      }
+    }
+
+    localStorage.setItem("basket", JSON.stringify(basket));
+  };
+
   render() {
     const { product } = this.state;
 
@@ -51,10 +85,15 @@ class Product extends Component {
                 </span>
               </div>
               <div className="button_group">
-                <button className="button_primary--important">
-                  Add to Shopping Cart
+                <button
+                  className="button button_primary button--important"
+                  onClick={this.addToBasket}
+                >
+                  Add to Basket
                 </button>
-                <button className="button_primary">Add to Wishlist</button>
+                <button className="button button_primary">
+                  Add to Wishlist
+                </button>
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import NavbarItemList from "./common/navbarItemList";
+import NavbarItemList from "./navbarItemList";
 
 class Navbar extends Component {
   state = {};
