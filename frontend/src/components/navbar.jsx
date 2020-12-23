@@ -5,6 +5,7 @@ import NavbarItemList from "./navbarItemList";
 class Navbar extends Component {
   state = {};
   render() {
+    const { basket } = this.props;
     return (
       <nav className="navbar">
         <div className="navbar__logo">
@@ -33,7 +34,7 @@ class Navbar extends Component {
               </button>
             </form>
           </div>
-          <NavbarItemList></NavbarItemList>
+          <NavbarItemList basket={basket}></NavbarItemList>
         </div>
       </nav>
     );

@@ -4,7 +4,10 @@ import { NavLink } from "react-router-dom";
 
 class NavbarItemList extends Component {
   state = {};
+
   render() {
+    const { basket } = this.props;
+
     return (
       <ul className="navbar__items">
         <li className="icon icon--labeled">
@@ -27,6 +30,7 @@ class NavbarItemList extends Component {
             <NavItem
               title="Basket"
               iconClass="fas fa-shopping-basket fa-3x"
+              counter={basket}
             ></NavItem>
           </NavLink>
         </li>

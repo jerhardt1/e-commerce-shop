@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import { getProduct } from "./services/productService";
 import ColorSelection from "./common/colorSelection";
 import SizeSelection from "./common/sizeSelection";
+import * as Storage from "../utils/localStorage";
 
 class Product extends Component {
   state = {
     product: [],
+    activeColor: null,
+    activeSize: null,
   };
 
   componentDidMount = async () => {
@@ -15,20 +18,41 @@ class Product extends Component {
     this.setState({ product });
   };
 
+  setSize = (activeSize) => this.setState({ activeSize });
+
+  setColor = (activeColor) => this.setState({ activeColor });
+
   addToBasket = () => {
-    const { product } = this.state;
-    const content = { id: product.id, amount: 1 };
-    let basket = JSON.parse(localStorage.getItem("basket"));
+    const { product, activeColor, activeSize } = this.state;
+    const { basket: basketAmount, setBasket } = this.props;
+    const content = {
+      id: product.id,
+      amount: 1,
+      color: activeColor,
+      size: activeSize,
+    };
+    let basket = Storage.get("basket");
 
     function itemInBasket() {
-      // check all items in basket if contain same id as product
+      // check all items in basket if contain same attributes as product
       for (var i in basket) {
-        if (basket[i].id === product.id) {
+        if (
+          basket[i].id === content.id &&
+          // stringify for simple object comparison
+          JSON.stringify(basket[i].color) === JSON.stringify(content.color) &&
+          basket[i].size === content.size
+        ) {
           // add 1 to prevent index of 0, allowing True/False check
           return parseInt(i) + 1;
         }
       }
+
       return 0;
+    }
+
+    if (product.sizes.length && activeSize === null) {
+      alert("Please select a size");
+      return;
     }
 
     const item = itemInBasket();
@@ -40,13 +64,17 @@ class Product extends Component {
       if (basket) {
         // append new product at the end of array
         basket[basket.length] = content;
+        // update navbar amount display
+        setBasket(basketAmount + 1);
       } else {
         // create new array with product inside
         basket = [content];
+        // update navbar amount display
+        setBasket(1);
       }
     }
 
-    localStorage.setItem("basket", JSON.stringify(basket));
+    Storage.set("basket", basket);
   };
 
   render() {
@@ -69,10 +97,16 @@ class Product extends Component {
             </div>
             <div className="prd_detailed__content">
               {product.colors && (
-                <ColorSelection data={product.colors}></ColorSelection>
+                <ColorSelection
+                  data={product.colors}
+                  onColorChange={(color) => this.setColor(color)}
+                ></ColorSelection>
               )}
               {product.sizes && (
-                <SizeSelection data={product.sizes}></SizeSelection>
+                <SizeSelection
+                  data={product.sizes}
+                  onSizeChange={(size) => this.setSize(size)}
+                ></SizeSelection>
               )}
               <div className="product-delivery">
                 <span className="font--bold">delivery within 2-3 days</span>

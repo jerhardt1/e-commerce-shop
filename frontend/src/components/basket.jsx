@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getProduct } from "./services/productService";
 import { Link } from "react-router-dom";
+import * as Storage from "../utils/localStorage";
 
 class Basket extends Component {
   state = {
@@ -18,7 +19,8 @@ class Basket extends Component {
   componentDidMount = () => {};
 
   getBasket = async () => {
-    const basket = JSON.parse(localStorage.getItem("basket"));
+    const basket = Storage.get("basket");
+    if (!basket) return;
     let products = [];
     let basketInfo = [];
     await Promise.all(
@@ -27,7 +29,10 @@ class Basket extends Component {
           let promise = await getProduct(item.id);
           products[index] = promise.data;
           basketInfo[index] = {
+            id: item.id,
             amount: item.amount,
+            color: item.color ? item.color : null,
+            size: item.size ? item.size : null,
             itemPrice: parseFloat(products[index].price),
             totalPrice: item.amount * parseFloat(products[index].price),
           };
@@ -37,7 +42,6 @@ class Basket extends Component {
       })
     );
 
-    console.log(basketInfo);
     this.setState({ products, basket: basketInfo });
   };
 
@@ -57,7 +61,7 @@ class Basket extends Component {
     // update the state/basket with new object
     basket[index] = newBasketItem;
 
-    console.log(basket);
+    Storage.update("basket", basket);
 
     this.setState({ basket });
   };
@@ -66,6 +70,10 @@ class Basket extends Component {
     const { products, basket } = this.state;
     products.splice(index, 1);
     basket.splice(index, 1);
+
+    Storage.update("basket", basket);
+
+    this.props.setBasket(this.getItemAmounts(basket));
     this.setState({ products, basket });
   };
 
@@ -82,6 +90,14 @@ class Basket extends Component {
       );
     }
     return options;
+  };
+
+  getItemAmounts = (basket = this.state.basket) => {
+    let total = 0;
+
+    basket.forEach(() => (total += 1));
+
+    return total;
   };
 
   getSubTotal = () => {
@@ -108,6 +124,23 @@ class Basket extends Component {
     alert(
       "Unfortunately, the current version of this demo does not allow to proceed to checkout yet. :)"
     );
+  };
+
+  getDetails = (index) => {
+    const { basket } = this.state;
+
+    const color = basket[index].color ? basket[index].color.color : null;
+    const size = basket[index].size;
+
+    if (color && size) {
+      return color + ", " + size;
+    } else if (color && !size) {
+      return color;
+    } else if (!color && size) {
+      return size;
+    } else {
+      return;
+    }
   };
 
   render() {
@@ -148,7 +181,7 @@ class Basket extends Component {
                   </div>
                   <div className="basketItem__info">
                     <h6 className="font font--bold">{product.title}</h6>
-                    <h6>Details</h6>
+                    <h6>{this.getDetails(index)}</h6>
                     <h6>(€ {product.price})</h6>
                   </div>
                   <div className="basketItem__quantity">
@@ -166,7 +199,7 @@ class Basket extends Component {
                   </div>
                   <div className="basketItem__price">
                     {/* item price = product's price *  amount in the basket */}
-                    {basket[index].totalPrice}
+                    {parseFloat(basket[index].totalPrice.toFixed(2))}
                   </div>
                   <div className="basketItem__delete">
                     <button

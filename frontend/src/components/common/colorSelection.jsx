@@ -10,11 +10,20 @@ class ColorSelection extends Component {
     super(props);
     const { data } = props;
     const colors = data ? data : [];
-    const activeColor = data ? data[0] : null;
+    const activeColor = colors.length > 0 ? colors[0] : null;
     this.state = { colors, activeColor };
   }
 
+  componentDidMount = () => {
+    const { onColorChange } = this.props;
+    const { activeColor } = this.state;
+    if (activeColor === undefined || activeColor === null) return;
+    onColorChange(activeColor);
+  };
+
   handleActiveColor = (color) => {
+    const { onColorChange } = this.props;
+    onColorChange(color);
     this.setState({ activeColor: color });
   };
 

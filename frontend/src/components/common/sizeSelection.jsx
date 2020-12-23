@@ -15,6 +15,8 @@ class SizeSelection extends Component {
   }
 
   handleActiveSize = (event) => {
+    const { onSizeChange } = this.props;
+    onSizeChange(event.target.value);
     this.setState({ activeSize: event.target.value });
   };
 
@@ -37,7 +39,7 @@ class SizeSelection extends Component {
               defaultValue=""
               className="prd_select"
               name="Size"
-              onChange={this.handleActiveSize}
+              onChange={(event) => this.handleActiveSize(event)}
             >
               <option defaultValue disabled value="">
                 Please select
