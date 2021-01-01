@@ -1,0 +1,4 @@
+{
+    "modes": ["List", "Galery"],
+    "iconClasses" : ["fas fa-bars", "fas fa-th-large"]
+}

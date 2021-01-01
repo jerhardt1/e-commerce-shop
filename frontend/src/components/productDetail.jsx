@@ -22,6 +22,49 @@ class Product extends Component {
 
   setColor = (activeColor) => this.setState({ activeColor });
 
+  itemInStorage = (object1, object2) => {
+    // check all items in object1 if contain same attributes as object2
+    for (var i in object1) {
+      if (
+        object1[i].id === object2.id &&
+        // stringify for simple object comparison
+        JSON.stringify(object1[i].color) === JSON.stringify(object2.color) &&
+        object1[i].size === object2.size
+      ) {
+        // add 1 to prevent index of 0, allowing True/False check
+        // index of actual item will be i-1
+        return parseInt(i) + 1;
+      }
+    }
+    return 0;
+  };
+
+  // this checks the local storage if an object/product is already inside or not
+  // it also executes a callback function to update the state of an parent component
+  // to update the amount display in the navbar
+  handleStorageChange = (object1, object2, amount, callback) => {
+    const item = this.itemInStorage(object1, object2);
+    let output = object1;
+
+    if (item) {
+      // increment amount in object
+      object1[item - 1].amount = object1[item - 1].amount + 1;
+    } else {
+      if (object1) {
+        // append new product at the end of array
+        object1[object1.length] = object2;
+        // update navbar amount display
+        callback(amount + 1);
+      } else {
+        // create new array with object/product inside
+        output = [object2];
+        // update navbar amount display
+        callback(1);
+      }
+    }
+    return output;
+  };
+
   addToBasket = () => {
     const { product, activeColor, activeSize } = this.state;
     const { basket: basketAmount, setBasket } = this.props;
@@ -33,48 +76,46 @@ class Product extends Component {
     };
     let basket = Storage.get("basket");
 
-    function itemInBasket() {
-      // check all items in basket if contain same attributes as product
-      for (var i in basket) {
-        if (
-          basket[i].id === content.id &&
-          // stringify for simple object comparison
-          JSON.stringify(basket[i].color) === JSON.stringify(content.color) &&
-          basket[i].size === content.size
-        ) {
-          // add 1 to prevent index of 0, allowing True/False check
-          return parseInt(i) + 1;
-        }
-      }
-
-      return 0;
+    // check if the product has sizes and if one is selected
+    if (product.sizes.length && activeSize === null) {
+      alert("Please select a size");
+      return;
     }
+
+    const newEntry = this.handleStorageChange(
+      basket,
+      content,
+      basketAmount,
+      setBasket
+    );
+
+    Storage.set("basket", newEntry);
+  };
+
+  addToWishlist = () => {
+    const { product, activeColor, activeSize } = this.state;
+    const { wishlist: wishlistAmount, setWishlist } = this.props;
+    const content = {
+      id: product.id,
+      amount: 1,
+      color: activeColor,
+      size: activeSize,
+    };
+    let wishlist = Storage.get("wishlist");
 
     if (product.sizes.length && activeSize === null) {
       alert("Please select a size");
       return;
     }
 
-    const item = itemInBasket();
+    const newEntry = this.handleStorageChange(
+      wishlist,
+      content,
+      wishlistAmount,
+      setWishlist
+    );
 
-    if (item) {
-      // increment amount in object
-      basket[item - 1].amount = basket[item - 1].amount + 1;
-    } else {
-      if (basket) {
-        // append new product at the end of array
-        basket[basket.length] = content;
-        // update navbar amount display
-        setBasket(basketAmount + 1);
-      } else {
-        // create new array with product inside
-        basket = [content];
-        // update navbar amount display
-        setBasket(1);
-      }
-    }
-
-    Storage.set("basket", basket);
+    Storage.set("wishlist", newEntry);
   };
 
   render() {
@@ -125,7 +166,10 @@ class Product extends Component {
                 >
                   Add to Basket
                 </button>
-                <button className="button button_primary">
+                <button
+                  className="button button_primary"
+                  onClick={this.addToWishlist}
+                >
                   Add to Wishlist
                 </button>
               </div>

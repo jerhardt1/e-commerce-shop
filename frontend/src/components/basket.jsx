@@ -16,8 +16,6 @@ class Basket extends Component {
     this.getBasket();
   }
 
-  componentDidMount = () => {};
-
   getBasket = async () => {
     const basket = Storage.get("basket");
     if (!basket) return;
@@ -66,6 +64,51 @@ class Basket extends Component {
     this.setState({ basket });
   };
 
+  handleWishlist = (index) => {
+    const { products, basket } = this.state;
+    const item = basket[index];
+    const newItem = {
+      id: item.id,
+      amount: item.amount,
+      color: item.color,
+      size: item.size,
+    };
+    const wishlist = Storage.get("wishlist");
+
+    if (!wishlist) {
+      Storage.set("wishlist", []);
+    }
+
+    function itemInStorage(storageArray, object) {
+      // check all items in object1 if contain same attributes as object
+      // for (var i in object1) {
+      for (var i in storageArray) {
+        if (
+          storageArray[i].id === object.id &&
+          // stringify for simple object comparison
+          JSON.stringify(storageArray[i].color) ===
+            JSON.stringify(object.color) &&
+          storageArray[i].size === object.size
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    products.splice(index, 1);
+    basket.splice(index, 1);
+
+    if (!itemInStorage(wishlist, newItem) || wishlist.length === 0) {
+      Storage.insert("wishlist", newItem);
+    }
+    Storage.update("basket", basket);
+
+    this.props.setWishlist(Storage.getAmount("wishlist"));
+    this.props.setBasket(Storage.getAmount("basket"));
+    this.setState({ products, basket });
+  };
+
   handleDelete = (index) => {
     const { products, basket } = this.state;
     products.splice(index, 1);
@@ -73,14 +116,14 @@ class Basket extends Component {
 
     Storage.update("basket", basket);
 
-    this.props.setBasket(this.getItemAmounts(basket));
+    this.props.setBasket(Storage.getAmount("basket"));
     this.setState({ products, basket });
   };
 
   getOptions = () => {
     const options = [];
 
-    // generate a bunch of <option> elements and set it's value to of i+1
+    // generate a bunch of <option> elements and set it's value to i+1
     for (var i = 0; i <= 49; i++) {
       let optionsValue = i + 1;
       options[i] = (
@@ -90,14 +133,6 @@ class Basket extends Component {
       );
     }
     return options;
-  };
-
-  getItemAmounts = (basket = this.state.basket) => {
-    let total = 0;
-
-    basket.forEach(() => (total += 1));
-
-    return total;
   };
 
   getSubTotal = () => {
@@ -177,12 +212,22 @@ class Basket extends Component {
               {products.map((product, index) => (
                 <div key={index} className="basketItem">
                   <div className="basketItem__image">
-                    <img src={product.image} alt={product.title}></img>
+                    <Link to={`/product/${product.id}`}>
+                      <img src={product.image} alt={product.title}></img>
+                    </Link>
                   </div>
                   <div className="basketItem__info">
-                    <h6 className="font font--bold">{product.title}</h6>
+                    <Link to={`/product/${product.id}`}>
+                      <h6 className="font font--bold">{product.title}</h6>
+                    </Link>
                     <h6>{this.getDetails(index)}</h6>
                     <h6>(€ {product.price})</h6>
+                    <span
+                      className="font--highlight"
+                      onClick={() => this.handleWishlist(index)}
+                    >
+                      On the wishlist
+                    </span>
                   </div>
                   <div className="basketItem__quantity">
                     {!!products.length && (
