@@ -3,19 +3,45 @@ import { getProduct } from "./services/productService";
 import ColorSelection from "./common/colorSelection";
 import SizeSelection from "./common/sizeSelection";
 import * as Storage from "../utils/localStorage";
+import Recommendations from "./recommendations";
+import PictureWithZoom from "./common/pictureWithZoom";
 
 class Product extends Component {
   state = {
     product: [],
+    currentId: null,
     activeColor: null,
     activeSize: null,
   };
 
-  componentDidMount = async () => {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.match.params.id !== prevState.currentId) {
+      return {
+        product: [],
+        currentId: nextProps.match.params.id,
+        activeColor: null,
+        actvieSize: null,
+      };
+    }
+
+    return null;
+  }
+
+  componentDidMount = () => {
+    this.fetchProduct();
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.match.params.id !== prevProps.match.params.id) {
+      this.fetchProduct();
+    }
+  };
+
+  fetchProduct = async () => {
     const productId = this.props.match.params.id;
     const { data: product } = await getProduct(productId);
 
-    this.setState({ product });
+    this.setState({ product, id: product.id });
   };
 
   setSize = (activeSize) => this.setState({ activeSize });
@@ -132,9 +158,7 @@ class Product extends Component {
                 <img src={product.image} alt="" />
                 <img src={product.image} alt="" />
               </div>
-              <div className="image-m">
-                <img src={product.image} alt="" />
-              </div>
+              <PictureWithZoom image={product.image} />
             </div>
             <div className="prd_detailed__content">
               {product.colors && (
@@ -182,6 +206,7 @@ class Product extends Component {
             <p>{product.description}</p>
           </div>
         </div>
+        <Recommendations />
       </div>
     );
   }

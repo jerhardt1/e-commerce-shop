@@ -12,7 +12,7 @@ class MainPage extends Component {
     subCategories: [],
     selectedCategory: null,
     selectedTag: null,
-    navigation: ["Homepage"],
+    // navigation: ["Homepage"],
   };
 
   componentDidMount = async () => {
@@ -20,23 +20,23 @@ class MainPage extends Component {
     const { data: categories } = await getCategories();
     this.setState({ products, categories }); // get data from api and save in state
     this.getSubCategories();
-    this.getCurrentPath();
+    // this.getCurrentPath();
   };
 
-  getCurrentPath = () => {
-    const { navigation } = this.state;
-    const location = this.props.match.params.id;
+  // getCurrentPath = () => {
+  //   const { navigation } = this.state;
+  //   const location = this.props.match.params.id;
 
-    navigation.push(location);
-    this.setState(navigation);
-  };
+  //   navigation.push(location);
+  //   this.setState(navigation);
+  // };
 
-  handlePathChange = (path) => {
-    const navigation = ["Products"];
-    navigation.push(path);
-    console.log(navigation);
-    return;
-  };
+  // handlePathChange = (path) => {
+  //   const navigation = ["Products"];
+  //   navigation.push(path);
+  //   console.log(navigation);
+  //   return;
+  // };
 
   getSubCategories = () => {
     const { categories: allCategories } = this.state;
@@ -89,7 +89,7 @@ class MainPage extends Component {
 
     return (
       <React.Fragment>
-        <Navigation path={navigation}></Navigation>
+        {/* <Navigation path={navigation}></Navigation> */}
         <div className="products-row">
           <div className="products-col">
             <ProductGroup

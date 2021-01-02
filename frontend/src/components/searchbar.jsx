@@ -1,12 +1,23 @@
 import React, { Component } from "react";
+import SearchResults from "./searchResults";
 import { getProducts } from "./services/productService";
 
 class Searchbar extends Component {
-  state = {};
+  state = {
+    results: [],
+    blur: true,
+  };
 
   handleQuery = async (event) => {
     let query = event.target.value;
     let results = await this.startQuery(query);
+    this.setState({ results, blur: false });
+  };
+
+  handleBlur = () => {
+    window.setTimeout(() => {
+      this.setState({ blur: true });
+    }, 100);
   };
 
   startQuery = async (query) => {
@@ -43,23 +54,27 @@ class Searchbar extends Component {
   };
 
   render() {
+    const { results, blur } = this.state;
     return (
       <div className="search">
-        <form className="form-inline my- my-lg-0">
+        <form className="search__form">
           <input
-            className="form-control mr-sm-2"
+            className="search__form__bar"
             type="search"
             placeholder="Search"
             aria-label="Search"
             onChange={(event) => this.handleQuery(event)}
+            onBlur={() => this.handleBlur()}
           />
           <button
-            className="btn btn-outline-success my-2 my-sm-0"
+            className="button button_secondary button--important button--square"
             type="submit"
           >
-            Search
+            <i className="fas fa-search"></i>
           </button>
         </form>
+
+        {!blur && <SearchResults results={results} />}
       </div>
     );
   }

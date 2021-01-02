@@ -17,8 +17,9 @@ import Footer from "./components/footer";
 function App() {
   const [basket, setBasket] = useState(0);
   const [wishlist, setWishlist] = useState(0);
-  const [account, setAccount] = useState(0);
-  const [service, setService] = useState(0);
+  // relevant stuff for later
+  // const [account, setAccount] = useState(0);
+  // const [service, setService] = useState(0);
 
   useEffect(() => {
     // initialize local storage
