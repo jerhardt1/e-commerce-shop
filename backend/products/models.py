@@ -6,12 +6,12 @@ class Product (models.Model):
     description = models.TextField()
     size = models.ManyToManyField('Size', blank=True)
     color = models.ManyToManyField('Color', blank=True)
+    tag = models.ManyToManyField('Tag',  blank=True)
     stock = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=7, decimal_places=2)  # 99999,99
     created_at = models.DateTimeField(auto_now_add=True)
     productType = models.ForeignKey('ProductType', null=True, default=None,
                                     blank=True, on_delete=models.CASCADE, related_name='products')
-    tags = models.ManyToManyField('Tag',  blank=True)
     image = models.ImageField(null=True, default=None)
 
     def __str__(self):

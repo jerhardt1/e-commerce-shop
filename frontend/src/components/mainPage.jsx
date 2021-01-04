@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import ProductGroup from "./productGroup";
-import Articles from "./products";
+import Products from "./products";
 import { getProducts } from "./services/productService";
-import { getCategories } from "./services/categoryService";
+import { getCategories, getTags } from "./services/categoryService";
 import Navigation from "./navigation";
 
 class MainPage extends Component {
@@ -15,13 +15,32 @@ class MainPage extends Component {
     // navigation: ["Homepage"],
   };
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.match.params.id !== prevState.selectedTag) {
+      return {
+        products: prevState.products,
+        categories: prevState.categories,
+        subCategories: prevState.subCategories,
+        selectedCategory: null,
+        selectedTag: nextProps.match.params.id,
+      };
+    }
+    return null;
+  }
+
   componentDidMount = async () => {
     const { data: products } = await getProducts();
     const { data: categories } = await getCategories();
-    this.setState({ products, categories }); // get data from api and save in state
+    this.setState({ products, categories, selectedTag: this.getActiveTag() }); // get data from api and save in state
     this.getSubCategories();
     // this.getCurrentPath();
   };
+
+  // componentDidUpdate = (prevProps) => {
+  //   if (prevProps.match.params.id !== this.props.match.params.id){
+  //     this.setState({selectedTag: prevProps.match.params.id})
+  //   }
+  // }
 
   // getCurrentPath = () => {
   //   const { navigation } = this.state;
@@ -38,6 +57,10 @@ class MainPage extends Component {
   //   return;
   // };
 
+  getActiveTag = () => {
+    return this.props.match.params.id;
+  };
+
   getSubCategories = () => {
     const { categories: allCategories } = this.state;
 
@@ -51,21 +74,38 @@ class MainPage extends Component {
     this.setState({ categories, subCategories });
   };
 
+  getProductsByTag = () => {
+    const { products, selectedTag } = this.state;
+    let filtered = products;
+
+    filtered = products.filter((item) =>
+      item.tags.find((tag) => tag.name === selectedTag)
+    );
+
+    return filtered;
+  };
+
   getFilteredData = () => {
-    const { products: allProducts, categories, selectedCategory } = this.state;
+    const {
+      products: allProducts,
+      categories,
+      selectedCategory,
+      selectedTag,
+    } = this.state;
 
     let filtered = allProducts; // return all products, if nothing selected
-    if (selectedCategory != null)
+    filtered = this.getProductsByTag();
+    if (selectedCategory !== null)
       if (
         categories.find(
           (category) => category["productType"] === selectedCategory // try to find the selected Category inside the main categories
         )
       ) {
-        filtered = allProducts.filter(
+        filtered = filtered.filter(
           (product) => product.category === selectedCategory // return all items inside the main category
         );
       } else {
-        filtered = allProducts.filter(
+        filtered = filtered.filter(
           (product) => product.subCategory === selectedCategory // otherwise return items belonging to the subcategory
         );
       }
@@ -75,7 +115,6 @@ class MainPage extends Component {
 
   handleTagSelect = (tag) => {
     this.setState({ selectedTag: tag });
-    console.log(this.state.selectedTag);
   };
 
   handleCategorySelect = (category, event) => {
@@ -84,7 +123,7 @@ class MainPage extends Component {
   };
 
   render() {
-    const { products, categories, subCategories, navigation } = this.state;
+    const { categories, subCategories } = this.state;
     const { data: filteredProducts } = this.getFilteredData(); // return the right products on the selected filter
 
     return (
@@ -94,13 +133,13 @@ class MainPage extends Component {
           <div className="products-col">
             <ProductGroup
               onCategorySelect={this.handleCategorySelect}
-              products={products}
+              products={this.getProductsByTag()}
               categories={categories}
               subCategories={subCategories}
             ></ProductGroup>
           </div>
           <div className="products-col">
-            <Articles data={filteredProducts}></Articles>
+            <Products data={filteredProducts}></Products>
           </div>
         </div>
       </React.Fragment>

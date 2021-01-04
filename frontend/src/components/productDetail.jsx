@@ -4,7 +4,7 @@ import ColorSelection from "./common/colorSelection";
 import SizeSelection from "./common/sizeSelection";
 import * as Storage from "../utils/localStorage";
 import Recommendations from "./recommendations";
-import PictureWithZoom from "./common/pictureWithZoom";
+import Magnifier from "react-magnifier";
 
 class Product extends Component {
   state = {
@@ -152,13 +152,8 @@ class Product extends Component {
         <div className="wrapper-m">
           <h5>{product.title}</h5>
           <div className="prd_detailed">
-            <div className="prd_detailed__images">
-              <div className="image-scroll image-scroll--vertical">
-                <img src={product.image} alt="" />
-                <img src={product.image} alt="" />
-                <img src={product.image} alt="" />
-              </div>
-              <PictureWithZoom image={product.image} />
+            <div className="prd_detailed__image">
+              <Magnifier src={product.image} height={"100%"} />
             </div>
             <div className="prd_detailed__content">
               {product.colors && (

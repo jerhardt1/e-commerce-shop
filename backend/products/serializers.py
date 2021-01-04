@@ -38,6 +38,12 @@ class ColorSerializer(serializers.ModelSerializer):
         fields = ('color', 'value',)
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ('id', 'name',)
+
+
 class ProductSerializer(serializers.ModelSerializer):
     subCategory = serializers.CharField(
         source='productType.productType', read_only=True)
@@ -45,10 +51,11 @@ class ProductSerializer(serializers.ModelSerializer):
         source='productType.parent.productType', read_only=True)
     sizes = SizeSerializer(source='size', many=True, read_only=True)
     colors = ColorSerializer(source='color', many=True, read_only=True)
+    tags = TagSerializer(source='tag', many=True, read_only=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'title', 'category', 'subCategory', 'description', 'sizes',
+        fields = ('id', 'title', 'tags', 'category', 'subCategory', 'description', 'sizes',
                   'colors', 'stock', 'price', 'image',)
 
 
@@ -65,12 +72,6 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductType
         fields = ('id', 'productType', 'category',)
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ('id', 'name',)
 
 
 class PromotionSerializer(serializers.ModelSerializer):

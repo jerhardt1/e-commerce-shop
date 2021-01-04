@@ -1,6 +1,29 @@
 import React, { Component } from "react";
 
 class ProductGroup extends Component {
+  state = {
+    selectedCategory: null,
+  };
+
+  getClassName = (category) => {
+    let name = "list-group-item border-0 category-item";
+    console.log(category, this.state.selectedCategory);
+
+    name =
+      category === this.state.selectedCategory
+        ? name + " font--important"
+        : name;
+
+    return name;
+  };
+
+  setCategory = (category, event) => {
+    const { onCategorySelect } = this.props;
+
+    this.setState({ selectedCategory: category });
+    onCategorySelect(category, event);
+  };
+
   render() {
     const {
       products,
@@ -16,7 +39,7 @@ class ProductGroup extends Component {
             <li
               key={category.id}
               className="list-group-item border-0 category-item"
-              onClick={(e) => onCategorySelect(category.productType, e)} // pass this event for event.stopPropagation
+              onClick={(e) => this.setCategory(category.productType, e)} // pass this event for event.stopPropagation
             >
               <strong>{category.productType}</strong>
               <span className="amount-heavy">
@@ -38,9 +61,9 @@ class ProductGroup extends Component {
                   .map((subCategory) => (
                     <li
                       key={subCategory.id}
-                      className="list-group-item  border-0 category-item"
+                      className="list-group-item border-0 category-item"
                       onClick={
-                        (e) => onCategorySelect(subCategory.productType, e) // pass this event for event.stopPropagation
+                        (e) => this.setCategory(subCategory.productType, e) // pass this event for event.stopPropagation
                       }
                     >
                       {subCategory.productType}
