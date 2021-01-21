@@ -4,6 +4,7 @@ import Products from "./products";
 import { getProducts } from "./services/productService";
 import { getCategories, getTags } from "./services/categoryService";
 import Navigation from "./navigation";
+import Loader from "react-loader-spinner";
 
 class MainPage extends Component {
   state = {
@@ -129,6 +130,7 @@ class MainPage extends Component {
     return (
       <React.Fragment>
         {/* <Navigation path={navigation}></Navigation> */}
+
         <div className="products-row">
           <div className="products-col">
             <ProductGroup

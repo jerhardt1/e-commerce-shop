@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import MainPage from "./components/mainPage";
 import NavTags from "./components/navTags";
 import Product from "./components/productDetail";
@@ -7,6 +8,8 @@ import Navbar from "./components/navbar";
 import NotFound from "./components/notFound";
 
 import "./scss/custom.scss";
+import "react-toastify/dist/ReactToastify.css";
+
 import Home from "./components/home";
 import Basket from "./components/basket";
 import Wishlist from "./components/wishlist";
@@ -30,6 +33,8 @@ function App() {
   return (
     <React.Fragment>
       <div className="container">
+        <ToastContainer></ToastContainer>
+
         <main className="main">
           <Navbar basket={basket} wishlist={wishlist}></Navbar>
           <NavTags></NavTags>

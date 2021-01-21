@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import BubbleCounter from "./bubbleCounter";
+import { Link } from "react-router-dom";
 
 class SlideShow extends Component {
   state = {
@@ -10,6 +11,7 @@ class SlideShow extends Component {
     this.getComponents(); // get some essential components for slideshow animation and layout
     this.setupLayout(); // reorder items to fit the animation process
     this.timeID = setInterval(() => this.handleNextSlide(1), 5000); // Start to animate the slides in a given Interval
+    window.addEventListener("resize", this.handleResize);
   };
 
   componentDidUpdate = () => {
@@ -19,6 +21,13 @@ class SlideShow extends Component {
 
   componentWillUnmount = () => {
     clearInterval(this.timeID); // Make sure to clear the timer before unmounting
+    window.removeEventListener("resize", this.handleResize);
+  };
+
+  handleResize = () => {
+    this.getComponents();
+    this.setupLayout();
+    this.handleNextSlide(1);
   };
 
   getComponents = () => {
@@ -35,9 +44,13 @@ class SlideShow extends Component {
     });
   };
 
-  handleNextSlide = (value) => {
+  handleNextSlide = (value, item = null) => {
     const { data: items } = this.props;
     let { active } = this.state;
+
+    if (item !== null) {
+      active = item;
+    }
 
     let index = items.indexOf(active);
 
@@ -57,7 +70,7 @@ class SlideShow extends Component {
   };
 
   render() {
-    const { data: items } = this.props;
+    const { data: items, targets } = this.props;
     const { active } = this.state;
 
     return (
@@ -76,13 +89,15 @@ class SlideShow extends Component {
         </div>
         <div className="promo-container">
           <ul className="promo-track">
-            {items.map((item) => (
+            {items.map((item, index) => (
               <li
                 key={item.id}
                 className={this.setClassName(item, active)}
                 onClick={() => this.handleNextSlide(item)}
               >
-                <img src={item.image} alt={item.title} />
+                <Link className="link" to={`/${targets[index]}`}>
+                  <img src={item.image} alt={item.title} />
+                </Link>
               </li>
             ))}
           </ul>

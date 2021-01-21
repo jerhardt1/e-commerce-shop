@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { getProducts } from "./services/productService";
 import Cinema from "./common/cinema";
+import Loader from "react-loader-spinner";
 
 class Recommendations extends Component {
   state = {
@@ -17,13 +18,16 @@ class Recommendations extends Component {
     const { products } = this.state;
     return (
       <div>
-        {/* only render if products stae has content */}
-        {products.length && (
+        {!!products.length ? (
           <Cinema
             title="Recommendations for you"
             data={products}
             amount={5}
           ></Cinema>
+        ) : (
+          <div className="loader">
+            <Loader color="#ffffff" type={"TailSpin"} height={30} width={30} />
+          </div>
         )}
       </div>
     );

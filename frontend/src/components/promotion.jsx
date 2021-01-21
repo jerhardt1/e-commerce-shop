@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SlideShow from "./common/slideShow";
 import { getPromotions } from "./services/promotionService";
+import Loader from "react-loader-spinner";
 
 class Promotion extends Component {
   state = {
@@ -14,13 +15,18 @@ class Promotion extends Component {
   };
 
   render() {
-    const { promotions } = this.state;
+    const promotions = [...this.state.promotions];
+    let targets = [];
+    promotions.forEach((promotion) => targets.push(promotion.tag));
 
     if (promotions.length === 0) {
-      // Basically show nothing while data fetching is not finished
-      return <div></div>;
+      return (
+        <div className="loader">
+          <Loader color="#848484" type={"TailSpin"} height={50} width={50} />
+        </div>
+      );
     } else {
-      return <SlideShow data={promotions}></SlideShow>;
+      return <SlideShow data={promotions} targets={targets}></SlideShow>;
     }
   }
 }

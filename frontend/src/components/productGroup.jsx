@@ -24,6 +24,16 @@ class ProductGroup extends Component {
     onCategorySelect(category, event);
   };
 
+  getClassName = (category) => {
+    let name = "";
+    name =
+      category === this.state.selectedCategory
+        ? name + "font font--important"
+        : name;
+
+    return name;
+  };
+
   render() {
     const {
       products,
@@ -35,13 +45,27 @@ class ProductGroup extends Component {
     return (
       <div>
         <ul className="list-group border-0">
+          <li
+            className="list-group-item border-0 category-item"
+            onClick={(e) => this.setCategory(null, e)}
+          >
+            <strong>
+              <span className={this.getClassName(null)}>All products</span>
+              <span className="amount-heavy">({products.length})</span>
+            </strong>
+          </li>
+          <br />
           {categories.map((category) => (
             <li
               key={category.id}
               className="list-group-item border-0 category-item"
               onClick={(e) => this.setCategory(category.productType, e)} // pass this event for event.stopPropagation
             >
-              <strong>{category.productType}</strong>
+              <strong>
+                <span className={this.getClassName(category.productType)}>
+                  {category.productType}
+                </span>
+              </strong>
               <span className="amount-heavy">
                 (
                 {
@@ -66,7 +90,11 @@ class ProductGroup extends Component {
                         (e) => this.setCategory(subCategory.productType, e) // pass this event for event.stopPropagation
                       }
                     >
-                      {subCategory.productType}
+                      <span
+                        className={this.getClassName(subCategory.productType)}
+                      >
+                        {subCategory.productType}
+                      </span>
                       <span className="amount">
                         (
                         {

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getProduct } from "./services/productService";
+import { toast } from "react-toastify";
 import ColorSelection from "./common/colorSelection";
 import SizeSelection from "./common/sizeSelection";
 import * as Storage from "../utils/localStorage";
@@ -114,6 +115,10 @@ class Product extends Component {
       basketAmount,
       setBasket
     );
+    toast("Item added to basket!", {
+      hideProgressBar: true,
+      autoClose: 2000,
+    });
 
     Storage.set("basket", newEntry);
   };
@@ -140,6 +145,10 @@ class Product extends Component {
       wishlistAmount,
       setWishlist
     );
+    toast("Item added to wishlist!", {
+      hideProgressBar: true,
+      autoClose: 2000,
+    });
 
     Storage.set("wishlist", newEntry);
   };

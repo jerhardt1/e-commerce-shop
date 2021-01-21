@@ -17,7 +17,7 @@ class BubbleCounter extends Component {
           <div
             key={item.id}
             className={this.setClassName(item, active)}
-            onClick={() => onChangeSlide(item)}
+            onClick={() => onChangeSlide(0, item)}
           ></div>
         ))}
       </div>

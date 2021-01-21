@@ -1,3 +1,5 @@
 {
-    "apiUrl": "http://localhost:8000/api"
+     "apiUrl": "https://e-commerce-demo-backend-je.herokuapp.com/api"
+
 }
+

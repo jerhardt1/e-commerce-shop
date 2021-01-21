@@ -12,11 +12,17 @@ class Cinema extends Component {
 
   componentDidMount = () => {
     this.setupLayout();
+    window.addEventListener("resize", this.setupLayout);
+  };
+
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.setupLayout);
   };
 
   setupLayout = () => {
     // setup the layout of the items based on the given amount by props
     // also save some class variables for reusability later on
+    // better switch to react refs instead ofvanilla query slectors
     const { data: items, amount: itemsPerPage } = this.props;
     this.track = document.querySelector(".cinema-track");
     this.trackWidth = this.track.getBoundingClientRect().width;
@@ -28,7 +34,8 @@ class Cinema extends Component {
       item.style.left = (this.trackWidth * index) / itemsPerPage + "px";
     });
     this.itemWidth = parseInt(this.trackItems[0].style.width);
-    this.setState({ pages });
+    this.track.style.transform = "translateX(-0px)";
+    this.setState({ pages, currentPage: 1 });
   };
 
   handleNextPage = (value) => {

@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { toast } from "react-toastify";
+
 import { getProduct } from "./services/productService";
 import * as Storage from "../utils/localStorage";
 import ViewModes from "../utils/viewModes.json";
@@ -114,6 +116,11 @@ class Wishlist extends Component {
     if (!itemInStorage(basket, newItem) || basket.length === 0) {
       Storage.insert("basket", newItem);
     }
+
+    toast("Item added to basket!", {
+      hideProgressBar: true,
+      autoClose: 2000,
+    });
 
     this.props.setBasket(Storage.getAmount("basket"));
     this.props.setWishlist(Storage.getAmount("wishlist"));
